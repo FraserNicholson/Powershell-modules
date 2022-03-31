@@ -1,0 +1,6 @@
+Test/
+*.md
+!README.md
+
+*.sql
+*.log
