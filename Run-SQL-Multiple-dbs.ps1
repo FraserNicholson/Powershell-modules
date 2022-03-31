@@ -1,4 +1,4 @@
-$Inst = "dealtrack-us-live.database.windows.net"
+$Inst = "(local)"
 
 $filepath = "./sql.sql"
 
