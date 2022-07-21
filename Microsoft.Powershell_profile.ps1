@@ -1,4 +1,4 @@
-$Env:PSModulePath = $Env:PSModulePath+";C:\Projects\Powershell modules"
+
 
 Import-Module z
 Import-Module posh-git
@@ -27,4 +27,23 @@ function Sync-Profile() {
 function Open-PSProfile() {
     $path =  $PSHome + "\Microsoft.PowerShell_profile.ps1"
     code $path
+}
+
+function Elevate { 
+    param (
+    [switch]$noExit
+    )
+
+    if ( ! (Test-Administrator) ) {
+        start-process wt -Verb runas -ArgumentList "-d ."
+        if (!$noExit) {
+            exit
+        }
+    }
+    else { Write-Warning "Session is already elevated" }
+}
+
+function Test-Administrator {  
+    $user = [Security.Principal.WindowsIdentity]::GetCurrent()
+    (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)  
 }
