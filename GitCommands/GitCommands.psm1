@@ -137,3 +137,48 @@ function Get-HasGitChanges {
         return $false
     }
 }
+
+function Get-HasFeatureBranchesForAllProjects([switch]$verbose) {
+    $location = Get-Location
+
+
+    $projects = Get-ProjectList
+    $projectBasePath = "C:\Projects\Enable\"
+
+
+    $projects.Keys | ForEach-Object {
+        $project = $_
+        $projectLocation = $projectBasePath + $project
+
+        Set-Location $projectLocation
+
+        $hasFeatureBranches = Get-HasFeatureBranches $verbose
+
+        if ($hasFeatureBranches) {
+            Write-Host "Non main/realease branches found in $project" -ForegroundColor 'red'
+        }
+    }
+
+    Set-Location $location
+}
+
+function Get-HasFeatureBranches([switch]$verbose) {
+    $branches = git branch
+    
+    $hasFeatureBranches = $false
+
+    foreach ($branch in $branches) {
+        if ($branch -match "main") {
+            continue
+        } if ($branch -match "release") {
+            continue
+        }
+
+        $hasFeatureBranches = $true
+        if ( $verbose ) {
+            write-host "Non main/release branch : $branch" -ForegroundColor 'yellow'
+        }
+    }
+
+    return $hasFeatureBranches
+}

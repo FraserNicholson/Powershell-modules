@@ -1,6 +1,6 @@
 $projectsFilePath = "C:\Projects\projects.txt"
 
-function Get-ProjectList {
+function Get-ProjectList([switch]$noLog) {
     $projects = [Ordered]@{}
 
     Get-Content $projectsFilePath | Foreach-Object {
@@ -11,7 +11,10 @@ function Get-ProjectList {
                 $lineNumber = $_.LineNumber
 
                 $projects[$project] = $lineNumber
-                write-host "$lineNumber - $project"
+
+                if ( !$noLog ) {
+                    write-host "$lineNumber - $project"
+                }
             }
         }
     }

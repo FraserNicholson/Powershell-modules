@@ -23,3 +23,8 @@ function Set-DevBranch() {
 function Sync-Profile() {
     Copy-Item -Path 'C:\Program Files (x86)\PowerShell\7\Microsoft.PowerShell_profile.ps1' -Destination "C:\Projects\Powershell modules"
 }
+
+function Open-PSProfile() {
+    $path =  $PSHome + "\Microsoft.PowerShell_profile.ps1"
+    code $path
+}

@@ -1,8 +1,10 @@
 Test/
 Work Related/
+Packages/
 
 *.md
 !README.md
 
 *.sql
 *.log
+*.txt
