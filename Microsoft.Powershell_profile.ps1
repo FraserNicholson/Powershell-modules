@@ -43,7 +43,29 @@ function Elevate {
     else { Write-Warning "Session is already elevated" }
 }
 
-function Test-Administrator {  
-    $user = [Security.Principal.WindowsIdentity]::GetCurrent()
-    (New-Object Security.Principal.WindowsPrincipal $user).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)  
+function GitPushCurrentBranch {
+    $currentBranch = &git rev-parse --abbrev-ref HEAD 
+
+    Invoke-Expression "git push --set-upstream origin $currentBranch"
+}
+
+function Remove-BinObj {
+    param (
+        [string]$Path
+    )
+
+    if ($Path) {
+        Get-ChildItem -Path $Path -include bin,obj -Force -Recurse  -ErrorAction SilentlyContinue `
+        | remove-item -Force -Recurse -ErrorAction SilentlyContinue
+    } else {
+        Write-Host "Error - Please provide a project location" -ForegroundColor "Red"
+    }
+}
+
+function GitSetAsSaveRepo {
+    $location = [string](Get-Location)
+
+    $location = $location.Replace("\","/")
+
+    git config --global --add safe.directory $location
 }
